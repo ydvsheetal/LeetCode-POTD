@@ -1,0 +1,28 @@
+class SnapshotArray {
+    vector<vector<pair<int,int>>> snaps;
+    int snapcount=0;
+public:
+    SnapshotArray(int length) {
+        snaps.resize(length);
+        snapcount=0;
+    }
+    
+    void set(int index, int val) {
+        if(!snaps[index].empty() && snaps[index].back().first == snapcount)
+        snaps[index].back().second = val;
+        else
+        snaps[index].push_back({snapcount,val});
+    }
+    
+    int snap() {
+        snapcount++;
+        return snapcount-1;
+    }
+    
+    int get(int index, int snap_id) {
+        int idx = upper_bound(snaps[index].begin(),snaps[index].end(), make_pair(snap_id,INT_MAX)) - snaps[index].begin();
+        if(idx==0)
+        return 0;
+        return snaps[index][idx-1].second;
+    }
+};
