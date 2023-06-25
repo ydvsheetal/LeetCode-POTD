@@ -1,0 +1,25 @@
+class Solution {
+public:
+int mod = 1e9+7;
+    int recur(int s, int f,vector<int>& l,int fuel,vector<vector<int>>& dp)
+    {
+        int ans = 0;
+        if(s==f)
+        ans++;
+        if(dp[s][fuel]!=-1)
+        return dp[s][fuel];
+        for(int i=0;i<l.size();i++)
+        {
+            if(i!=s && abs(l[s]-l[i])<=fuel)
+            {
+                ans+=recur(i,f,l,fuel-abs(l[s]-l[i]),dp);
+                ans%=mod;
+            }
+        }
+        return dp[s][fuel] = ans;
+    }
+    int countRoutes(vector<int>& locations, int start, int finish, int fuel) {
+        vector<vector<int>> dp(105,vector<int>(205,-1));
+        return recur(start,finish,locations,fuel,dp);
+    }
+};
