@@ -1,0 +1,32 @@
+class Solution {
+public:
+    double mn = 1e-5;
+    void dfs(vector<pair<int,double>> adj[],int s,int e,double& ans,double prob,vector<bool>& visit)
+    {
+        if(prob<=mn)
+        return;
+        if(s==e)
+        {
+            ans = max(ans,prob);
+            return ;
+        }
+        visit[s] = true;
+        for(auto p: adj[s])
+        {
+            if(visit[p.first]==false && prob*p.second>=ans)
+            dfs(adj,p.first,e,ans,prob*p.second,visit);
+        }
+        visit[s] = false;
+    }
+    double maxProbability(int n, vector<vector<int>>& edges, vector<double>& succProb, int start, int end) {
+        vector<pair<int,double>> adj[n];
+        for(int i=0;i<edges.size();i++)
+        {adj[edges[i][0]].push_back({edges[i][1],succProb[i]});
+        adj[edges[i][1]].push_back({edges[i][0],succProb[i]});}
+        vector<bool> visit(n,false);
+        double ans = 0;
+        double prob = 1;
+        dfs(adj,start,end,ans,prob,visit);
+        return ans;
+    }
+};
